@@ -1,0 +1,233 @@
+let yPos = 0
+
+//Variáveis de Dinheiro
+let saldo = 0;
+
+//Variáveis do Canvas
+let xCanvas = 545;
+let yCanvas = 545;
+
+//Variáveis da Lâmpada01
+let horizontal = 0.15 * xCanvas
+let vertical   = 0.23 * yCanvas
+let tamanho    = 0.18 * xCanvas
+let largura    = tamanho / 8
+
+//Variáveis de controle das lâmpadas
+let luz01 = 0
+let luz02 = 0
+
+//##### DECLARAR VARIÁVEIS ACIMA ####//
+
+function setup() {
+  
+  createCanvas(xCanvas,yCanvas);
+  bordasDoCanvas();
+  
+  //Verifica pressionamento dos botões do mouse
+  mousePressed()
+  
+  //Cria o botão de rodada
+  button = createButton('Rodada');
+  button.position(0, 0);
+  button.mousePressed(rodada);
+  
+  //Cria o botão que exibe o saldo
+  printasaldo()
+  
+
+  //quadrante02()
+  //quadrante03()
+  //quadrante04()
+  
+ 
+}
+
+
+function draw() {
+  
+  
+  bordasDoCanvas()
+  
+  quadrante01()
+  lampada01()
+  lampada02()
+}
+
+function bordasDoCanvas(){
+  line(0, 0, xCanvas, 0);
+  line(xCanvas, 0, xCanvas, yCanvas);
+  line(xCanvas, yCanvas, 0, yCanvas)
+  line(0, yCanvas, 0, 0)
+}
+
+
+function quadrante01(){
+  if (luz01 + luz02 === 0) {
+    fill(255)
+    //print("quadrante branco")
+  }
+  if (luz01 + luz02 === 1) {
+    fill(209)
+    //print("quadrante claro 209")
+  }
+  if (luz01 + luz02 === 2) {
+    fill (167)
+    //print("quadrante cinza 167")
+  }
+  if (luz01 + luz02 === 3) {
+    fill (87)
+    //print("quadrante escuro 87")
+  }
+  if (luz01 + luz02 > 3) {
+    fill (0)
+    //print("quadrante preto")
+  }
+  rect (0,0, xCanvas /2 , yCanvas /2  )
+  
+}
+
+
+function lampada01(){
+  
+  if (luz01===0){
+    fill ("white")
+  }
+  if (luz01===1){
+    fill ("gray")
+  }
+  if (luz01>=2){
+    fill (0, 0, 128)
+  }
+  rect(horizontal, vertical, tamanho, largura)
+}   
+
+
+function lampada02(){
+  if (luz02===0){
+    fill ("white")
+  }
+  if (luz02===1){
+    fill ("gray")
+    //fill ("black")
+  }
+  if (luz02>=2){
+    fill (0, 0, 128)
+  }
+  rect(horizontal, vertical + largura, tamanho, largura)
+}
+  
+  
+function quadrante02(){
+
+  rect (xCanvas /2 ,0, xCanvas /2 , yCanvas / 2)
+  //lâmpada 03
+  rect(horizontal *4.5, vertical, tamanho, largura)
+  //lâmpada 04
+  rect(horizontal *4.5, vertical + largura, tamanho, largura)
+}
+
+
+function quadrante03(){
+
+  rect (0, xCanvas /2 , xCanvas /2, yCanvas / 2)
+  //lâmpada 05
+  rect(horizontal, vertical *3.2  , tamanho, largura)
+  //lâmpada 06
+  rect(horizontal, vertical *3.2 + largura, tamanho, largura)
+}
+
+
+function quadrante04(){
+  
+  rect (xCanvas /2 , yCanvas /2, xCanvas, yCanvas )
+  //lâmpada 07
+  rect(horizontal * 4.5, vertical *3.2, tamanho, largura)
+  //lâmpada 08
+  rect(horizontal * 4.5, vertical *3.2 + largura, tamanho, largura)
+}
+
+
+function mousePressed(){
+  
+   //Verifica se clicou na lâmpada 01
+  if (mouseIsPressed && mouseX > horizontal && mouseX < horizontal + tamanho && mouseY > vertical && mouseY < vertical + largura) {
+    
+    reparolampada01()
+    
+}
+  
+   //Verifica se clicou na lâmpada 02
+   if (mouseIsPressed && mouseX > horizontal && mouseX < horizontal + tamanho && mouseY > vertical + largura && mouseY < vertical + (2 * largura)) {
+    reparolampada02()
+  
+    }
+  
+}
+  
+
+function rodada(){
+  
+  saldo = saldo + int(random(0,10))
+  queima01();
+  queima02();
+  quadrante01();
+  printasaldo()
+}
+
+
+function queima01(){
+  
+    luz01 = luz01 + int(random(-1, 2.99))
+    if (luz01 > 2) {
+      luz01 = 2
+    }
+    //print("Valor de luz01 é: " + luz01)
+    lampada01() 
+}
+
+function queima02(){
+  
+    luz02 = luz02 + int(random(-1, 2.99))
+    if (luz02 > 2) {
+      luz02 = 2
+    }
+    //print("Valor de luz02 é: " + luz02)
+    lampada02()
+  
+}
+
+function printasaldo(){
+  //Cria ou atualiza o botão que exibe o saldo
+  if (saldo < 10){
+    button = createButton("Saldo:"+ "0"+ saldo);
+    button.position(62, 0);
+  } else {
+      button = createButton("Saldo:"+ saldo);
+      button.position(62, 0);
+      }
+}
+
+function reparolampada01(){
+  
+    if((saldo - 10) >= 0){
+    saldo = saldo - 10
+    luz01 = 0
+    lampada01()
+    printasaldo()
+    } else {
+    print("sem saldo")
+      } 
+    }
+
+function reparolampada02(){
+  
+  if((saldo - 10) >= 0){
+    saldo = saldo - 10
+    luz02 = 0
+    lampada02()
+    printasaldo()
+  } else {
+    print("sem saldo")
+  }
+}
